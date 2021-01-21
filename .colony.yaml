@@ -53,7 +53,7 @@ applications:
       os_type: linux
       image:
         azure_image:
-        - urn: Canonical:UbuntuServer:18.04-LTS:latest
+        - urn: cognosys:centos-8-2-free:centos-8-2-free:1.2019.0810
           username: adminuser
 
     configuration:
