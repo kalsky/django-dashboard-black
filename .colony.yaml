@@ -6,6 +6,10 @@ outputs:
 scripts:
   init.sh: |
     #!/bin/bash
+    sudo apt-get update
+    sudo apt-get -y install python3-pip
+    sudo pip3 install --upgrade pip
+    sudo pip3 install virtualenv
     sudo mkdir /var/www
     sudo mkdir /var/www/ddb
     git clone https://github.com/kalsky/django-dashboard-black --depth 1 --branch=master /var/www/ddb
@@ -13,8 +17,8 @@ scripts:
     virtualenv env
     source env/bin/activate
     pip3 install -r requirements
-    python manage.py makemigrations
-    python manage.py migrate
+    python3 manage.py makemigrations
+    python3 manage.py migrate
     
   start.sh: |
     #!/bin/bash
@@ -46,7 +50,7 @@ applications:
       os_type: linux
       image:
         azure_image:
-        - urn: Canonical:UbuntuServer:16.04-LTS:latest
+        - urn: Canonical:UbuntuServer:18.04-LTS:latest
           username: adminuser
 
     configuration:
