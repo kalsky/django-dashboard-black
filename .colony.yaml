@@ -85,4 +85,4 @@ blueprint:
             - AZURE_VM_SIZE: Standard_B1s
 
     debugging:
-      availability: on
+      availability: off
