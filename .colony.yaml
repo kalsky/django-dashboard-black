@@ -6,11 +6,13 @@ outputs:
 scripts:
   init.sh: |
     #!/bin/bash
+    sudo apt-get update
+    sudo apt-get -y install python3-pip
     sudo pip3 install --upgrade pip
-    sudo dnf install sqlite git -y
+    sudo apt install sqlite3
     sudo mkdir /var/www
     sudo mkdir /var/www/ddb
-    sudo git clone https://github.com/kalsky/django-dashboard-black --depth 1 --branch=master /var/www/ddb
+    git clone https://github.com/kalsky/django-dashboard-black --depth 1 --branch=master /var/www/ddb
     cd /var/www/ddb
     echo "ALLOWED_HOSTS.append('*')" | sudo tee -a core/settings.py
     sudo sqlite3 db.sqlite3 "VACUUM;"
@@ -51,7 +53,7 @@ applications:
       os_type: linux
       image:
         azure_image:
-        - urn: cognosys:centos-8-2-free:centos-8-2-free:1.2019.0810
+        - urn: Canonical:UbuntuServer:18.04-LTS:latest
           username: adminuser
 
     configuration:
@@ -63,7 +65,7 @@ applications:
       # To validate the installation, we wait to see that the ports are available
       healthcheck:
         wait_for_ports: ALL
-        timeout: 120
+        timeout: 180
 
     debugging: 
       connection_protocol: SSH
