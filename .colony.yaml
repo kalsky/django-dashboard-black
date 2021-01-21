@@ -1,0 +1,82 @@
+spec_version: 1
+
+outputs:
+  url: sandbox  # can be sandbox, target
+
+scripts:
+  init.sh: >
+    #!/bin/bash
+    mkdir ~/ddb
+    cd ~/ddb
+    git clone https://github.com/kalsky/django-dashboard-black --depth 1 --branch=master ~/ddb
+    virtualenv env
+    source env/bin/activate
+    pip3 install -r requirements
+    python manage.py makemigrations
+    python manage.py migrate
+    
+  start.sh: >
+    #!/bin/bash
+    sudo python manage.py runserver 80
+
+applications:
+  website:
+    spec_version: 1
+    kind: application
+
+    inputs:
+      - PORT: 80
+      - AZURE_VM_SIZE: Standard_B1s
+
+    infrastructure:
+      compute:
+        spec:
+          azure:
+            vm_size: $AZURE_VM_SIZE
+
+      # Port 80 will be opened externally to receive web requests
+      connectivity:
+        external:
+          - web:
+              port: $PORT
+
+    # This is a clean Ubuntu server image that will be
+    source:
+      os_type: linux
+      image:
+        azure_image:
+        - urn: Canonical:UbuntuServer:16.04-LTS:latest
+          username: adminuser
+
+    configuration:
+      initialization:
+        script: init.sh
+      # This command restarts the Apache server after the initialization completes
+      start:
+        script: start.sh
+      # To validate the installation, we wait to see that the ports are available
+      healthcheck:
+        wait_for_ports: ALL
+        timeout: 180
+
+    debugging: 
+      connection_protocol: SSH
+
+blueprint:
+  glass-website:
+    spec_version: 1
+    kind: blueprint
+    metadata:
+      description: >
+        django dashboard black
+    clouds: 
+      - Azure: westus2
+
+    applications:
+      - glass:
+          input_values:
+            - PORT: 80
+            - AZURE_VM_SIZE: Standard_B1s
+
+    debugging:
+      availability: on
