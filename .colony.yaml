@@ -20,7 +20,7 @@ scripts:
     sudo python manage.py runserver 80
 
 applications:
-  website:
+  ddb-app:
     spec_version: 1
     kind: application
 
@@ -63,7 +63,7 @@ applications:
       connection_protocol: SSH
 
 blueprint:
-  glass-website:
+  django-dashboard-black:
     spec_version: 1
     kind: blueprint
     metadata:
@@ -73,7 +73,7 @@ blueprint:
       - Azure: westus2
 
     applications:
-      - glass:
+      - ddb-app:
           input_values:
             - PORT: 80
             - AZURE_VM_SIZE: Standard_B1s
