@@ -4,7 +4,7 @@ outputs:
   url: sandbox  # can be sandbox, target
 
 scripts:
-  init.sh: >
+  init.sh: |
     #!/bin/bash
     mkdir ~/ddb
     cd ~/ddb
@@ -15,7 +15,7 @@ scripts:
     python manage.py makemigrations
     python manage.py migrate
     
-  start.sh: >
+  start.sh: |
     #!/bin/bash
     sudo python manage.py runserver 80
 
